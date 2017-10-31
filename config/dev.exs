@@ -34,7 +34,8 @@ config :logger, :console, format: "[$level] $message\n"
 config :phoenix, :stacktrace_depth, 20
 
 # Configure your database
-# dev only: docker run --name phoenix-postgres -e POSTGRES_USER=someuser -e POSTGRES_PASSWORD=somepassword -v pgdata:/var/lib/postgresql/data -p 127.0.0.1:5432:5432 -d postgres:alpine
+# dev only: `docker run --name phoenix-postgres -e POSTGRES_USER=someuser -e POSTGRES_PASSWORD=somepassword -v pgdata:/var/lib/postgresql/data -p 127.0.0.1:5432:5432 -d postgres:alpine`
+# once started use `docker start phoenix-postgres`
 config :discuss, Discuss.Repo,
   adapter: Ecto.Adapters.Postgres,
   username: "someuser",
