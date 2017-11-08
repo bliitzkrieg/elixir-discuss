@@ -7,10 +7,16 @@ defmodule Discuss.AuthController do
     def callback(%{assigns: %{ ueberauth_auth: auth}} = conn, %{"provider" => provider}) do
         user_params = %{token: auth.credentials.token, email: auth.info.email, provider: provider}
         changeset = User.changeset(%User{}, user_params)
-        sign_in(conn, changeset)
+        signin(conn, changeset)
     end
 
-    defp sign_in(conn, changset) do
+    def signout(conn, _params) do
+        conn
+        |> configure_session(drop: true)
+        |> redirect(to: topic_path(conn, :index))
+    end
+
+    defp signin(conn, changset) do
         case insert_or_update_user(changset) do
             {:ok, user} ->
                 conn
