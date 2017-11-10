@@ -1,1 +1,15 @@
-<%= @topic.title %>
+<h5><%= @topic.title %></h5>
+
+<div class="input-field">
+    <textarea class="materialize-textarea"></textarea>
+    <button class="btn">Add Comment</button>
+    
+    <!-- Comments get injected here via renderComment in socket.js -->
+    <ul class="collection"></ul>
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        window.__discuss__.createSocket(<%= @topic.id %>)
+    });
+</script>
