@@ -1,6 +1,6 @@
 import { Socket } from "phoenix"
 
-const socket = new Socket("/socket", {params: {token: window.userToken}})
+const socket = new Socket("/socket", {params: {token: window.__discuss__.token}})
 
 socket.connect()
 
@@ -15,9 +15,12 @@ const createSocket = (topicId) => {
   channel.on(`comments:${topicId}:new`, renderComment);
 
   document.querySelector('button').addEventListener('click', () => {
-    const content = document.querySelector('textarea').value;
+    const input = document.querySelector('textarea');
+    const content = input.value;
 
     channel.push('comment:add', { content });
+
+    input.value = "";
   });
 }
 
@@ -32,10 +35,14 @@ const renderComment = ({comment}) => {
   document.querySelector('.collection').innerHTML += renderedComment;
 };
 
-const commentTemplate = comment => {
+const commentTemplate = ({content, user}) => {
+  const email = user ? user.email : 'Anonymous';
   return `
     <li class="collection-item">
-      ${comment.content}
+      ${content}
+      <div class="secondary-content">
+        ${email}
+      </div>
     </li>
   `;
 };
