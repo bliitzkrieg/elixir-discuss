@@ -12,7 +12,7 @@ defmodule Discuss.CommentsChannel do
         {:ok, %{comments: topic.comments}, assign(socket, :topic, topic)}
     end
 
-    def handle_in(name, %{"content" => content}, socket) do
+    def handle_in(_name, %{"content" => content}, socket) do
         topic = socket.assigns.topic
         user_id = socket.assigns.user_id
 

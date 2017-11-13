@@ -43,19 +43,26 @@ config :logger, level: :info
 #
 # Check `Plug.SSL` for all available options in `force_ssl`.
 
-# ## Using releases
-#
-# If you are doing OTP releases, you need to instruct Phoenix
-# to start the server for all endpoints:
-#
-#     config :phoenix, :serve_endpoints, true
-#
-# Alternatively, you can configure exactly which server to
-# start per endpoint:
-#
-#     config :discuss, Discuss.Endpoint, server: true
-#
+use Mix.Config
 
-# Finally import the config/prod.secret.exs
-# which should be versioned separately.
-import_config "prod.secret.exs"
+# In this file, we keep production configuration that
+# you likely want to automate and keep it away from
+# your version control system.
+#
+# You should document the content of this
+# file or create a script for recreating it, since it's
+# kept out of version control and might be hard to recover
+# or recreate for your teammates (or you later on).
+config :discuss, Discuss.Endpoint,
+  load_from_system_env: true,
+  url: [scheme: "https", host: "mysterious-meadow-6277.herokuapp.com", port: 443],
+  force_ssl: [rewrite_on: [:x_forwarded_proto]],
+  # secret_key_base: "Gmfe1JFUyiZ492JIdoXdwanYVyN+/xs4aB5CIYV4flDQZpGKP+7+Cqs7OnSv6MyK"
+  secret_key_base: Map.fetch!(System.get_env(), "SECRET_KEY_BASE")
+
+# Configure your database
+config :discuss, Discuss.Repo,
+  adapter: Ecto.Adapters.Postgres,
+  url: System.get_env("DATABASE_URL"),
+  pool_size: String.to_integer(System.get_env("POOL_SIZE") || "10"),
+  ssl: true
